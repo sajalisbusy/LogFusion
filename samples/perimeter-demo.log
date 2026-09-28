@@ -1,0 +1,11 @@
+CEF:0|Fortinet|FortiGate|7.4.2|traffic-1001|Blocked outbound DNS|8|src=10.12.4.21 dst=203.0.113.77 spt=53122 dpt=53 proto=UDP act=deny rt=2026-09-29T04:12:41Z ruleName="Egress DNS Control" duser=alex.morgan
+CEF:0|Cisco|Secure Firewall|7.2|430001|Allowed HTTPS connection|2|src=10.12.8.44 dst=198.51.100.29 spt=49810 dpt=443 proto=TCP act=allow rt=2026-09-29T04:14:02Z app=https cs1Label=Policy cs1="Outbound Web"
+LEEF:1.0|Palo Alto Networks|PAN-OS|11.1|THREAT|cat=THREAT	src=10.12.8.44	dst=198.51.100.29	spt=49810	dpt=443	proto=tcp	action=allow	sev=3	devTime=2026-09-29T04:14:22Z	usrName=svc-build	ruleName=Outbound-Web
+LEEF:2.0|Check Point|Quantum Gateway|R81.20|drop-203|0x09|cat=firewall	src=10.12.7.16	dst=192.0.2.81	spt=60123	dpt=22	proto=tcp	action=drop	sev=8	devTime=2026-09-29T04:15:10Z	msg=SSH policy violation
+<134>1 2026-09-29T04:16:13Z edge-fw-03 CiscoASA - - - action=drop src=10.12.2.19 dst=192.0.2.81 spt=60123 dpt=22 proto=tcp msg="SSH policy violation"
+<134>Sep 29 04:17:24 edge-fw-04 JuniperSRX: action=permit src=10.12.6.31 dst=198.51.100.53 spt=55231 dpt=53 proto=udp app=dns msg="Approved DNS request"
+{"@timestamp":"2026-09-29T04:18:50Z","observer":{"vendor":"NetShield","product":"Branch NGFW","name":"branch-fw-02","ip":"10.0.0.254"},"source":{"ip":"10.0.2.17","port":54012},"destination":{"ip":"198.51.100.22","port":443},"network":{"protocol":"tcp","application":"tls"},"event":{"action":"allow","severity":"low","code":"TRAFFIC_ACCEPT","reason":"Matched outbound web policy"},"user":{"name":"jules.park"},"rule":{"name":"Standard web access","id":"POL-104"}}
+{"time":"2026-09-29T04:19:05Z","vendor":"EdgeCore","product":"NX-9000","hostname":"edge-core-01","srcIp":"10.12.1.5","srcPort":49220,"destinationAddress":"203.0.113.12","destinationPort":443,"protocol":"tcp","action":"blocked","severity":"high","ruleName":"Threat feed deny","customTag":"feed-match-782"}
+{"@timestamp":"2026-09-29T04:20:11Z","observer":{"vendor":"Northstar","product":"Secure Gateway","name":"north-gw-01"},"source":{"ip":"10.12.3.9"},"destination":{"ip":"203.0.113.9","port":8443},"network":{"protocol":"tcp"},"event":{"action":"allow","category":"network","code":"CONN-200"},"labels":{"zone":"dmz","change":"CHG-2041"}}
+ORBIT-GW [notice] sensor=west-2 payload_signature=7f8b1a event="new firmware state observed"
+{malformed-json source=lab-fw event=connection_reset

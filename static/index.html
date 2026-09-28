@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1220">
+  <title>ULPF — Universal Log Pre-processing Framework</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="/" aria-label="ULPF home">
+        <span class="brand-mark"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6 8.5v9.2a5 5 0 0 0 5 5h2.2m12.8-13v8.1a5 5 0 0 1-5 5H18m-2-17v12m-5-5 5 5 5-5"/></svg></span>
+        <span><strong>ULPF</strong><small>EVENT PIPELINE</small></span>
+      </a>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a class="nav-item active" href="#overview"><span class="nav-icon">◫</span>Overview</a>
+        <a class="nav-item" href="#ingest"><span class="nav-icon">⇧</span>Ingest events</a>
+        <a class="nav-item" href="#events"><span class="nav-icon">≋</span>Event stream<span id="nav-count" class="nav-count">0</span></a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="airgap-card"><span class="airgap-icon">⌁</span><div><strong>Air-gap ready</strong><small>Runs fully on your host</small></div><span class="green-dot"></span></div>
+        <div class="sidebar-foot"><span class="avatar">U</span><span><strong>Local workspace</strong><small>Prototype · v0.1.0</small></span><span class="more">···</span></div>
+      </div>
+    </aside>
+
+    <main class="main-area" id="overview">
+      <header class="topbar">
+        <div class="breadcrumbs"><span>ULPF</span><span class="crumb-slash">/</span><strong>Overview</strong></div>
+        <div class="topbar-actions"><span class="live-status"><i></i> Pipeline online</span><a class="icon-button" href="/api/export" title="Export normalized events as JSONL" aria-label="Export events">↓</a><a class="help-button" href="/README.md" target="_blank" rel="noreferrer">Setup guide <span>↗</span></a></div>
+      </header>
+
+      <div class="page-content">
+        <section class="page-heading">
+          <div><div class="eyebrow">PERIMETER TELEMETRY</div><h1>Event operations</h1><p>Bring network device logs into one lossless, analytics-ready stream.</p></div>
+          <div class="heading-meta"><span class="meta-dot"></span>Local processing <span class="meta-divider">·</span> No external services</div>
+        </section>
+
+        <section class="stats-grid" aria-label="Pipeline metrics">
+          <article class="stat-card"><div class="stat-top"><span>Events received</span><span class="stat-icon blue">≋</span></div><div id="stat-total" class="stat-value">0</div><div class="stat-foot"><span class="stat-sub">Stored in local SQLite</span><span class="mini-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></div></article>
+          <article class="stat-card"><div class="stat-top"><span>Normalized</span><span class="stat-icon green">✓</span></div><div id="stat-normalized" class="stat-value">0<span class="stat-unit"> events</span></div><div class="stat-foot"><span class="stat-sub">Common fields extracted</span><span id="normalized-share" class="trend">—</span></div></article>
+          <article class="stat-card"><div class="stat-top"><span>Input formats</span><span class="stat-icon violet">⌘</span></div><div id="stat-formats" class="stat-value">0</div><div id="format-summary" class="stat-foot"><span class="stat-sub">Adapters available</span><span class="format-dots"><i></i><i></i><i></i></span></div></article>
+          <article class="stat-card"><div class="stat-top"><span>Raw events retained</span><span class="stat-icon amber">◈</span></div><div id="stat-raw" class="stat-value">100<span class="stat-unit">%</span></div><div class="stat-foot"><span class="stat-sub">SHA-256 linked to each event</span><span class="shield-icon">◆</span></div></article>
+        </section>
+
+        <section class="work-grid">
+          <article class="panel ingest-panel" id="ingest">
+            <div class="panel-heading"><div><div class="section-kicker"><span class="step-badge">01</span> INGEST</div><h2>Send events to the pipeline</h2><p>Paste one event per line. Format detection happens automatically.</p></div><button id="load-samples" class="text-button" type="button"><span>✦</span> Load demo bundle</button></div>
+            <div class="input-toolbar"><div class="format-detect"><span class="detect-icon">⌕</span><span>Auto-detect format</span><span class="chevron">⌄</span></div><span class="input-hint">JSON · CEF · LEEF · Syslog · raw</span></div>
+            <label class="sr-only" for="event-input">Paste raw event lines</label>
+            <textarea id="event-input" spellcheck="false" placeholder="Paste raw network device events here…&#10;&#10;Example: CEF:0|Acme|Edge Firewall|1.0|1001|Connection denied|8|src=10.0.0.8 dst=203.0.113.4 dpt=443 act=deny"></textarea>
+            <div class="ingest-footer"><span id="line-count">0 events ready</span><div><button id="clear-input" class="secondary-button" type="button">Clear</button><button id="ingest-button" class="primary-button" type="button"><span>Normalize events</span><span class="button-arrow">→</span></button></div></div>
+            <div id="ingest-result" class="ingest-result" role="status" hidden></div>
+            <div class="pipeline-flow"><div class="flow-node"><span class="flow-symbol input-symbol">↧</span><span>Raw input</span></div><span class="flow-line"></span><div class="flow-node"><span class="flow-symbol parse-symbol">⌘</span><span>Parse & map</span></div><span class="flow-line"></span><div class="flow-node"><span class="flow-symbol output-symbol">▤</span><span>ULPF event</span></div><span class="flow-caption">TRACEABLE END TO END</span></div>
+          </article>
+
+          <article class="panel adapters-panel">
+            <div class="panel-heading compact-heading"><div><div class="section-kicker"><span class="step-badge purple-step">02</span> ADAPTERS</div><h2>Source coverage</h2><p>Detect and normalize common perimeter log formats.</p></div><span class="adapter-count">5 <small>ACTIVE</small></span></div>
+            <div class="adapter-list">
+              <div class="adapter-row"><span class="format-logo cef-logo">C</span><span class="adapter-name"><strong>Common Event Format</strong><small>CEF · ArcSight compatible</small></span><span class="adapter-state"><i></i> Ready</span></div>
+              <div class="adapter-row"><span class="format-logo leef-logo">L</span><span class="adapter-name"><strong>Log Event Extended</strong><small>LEEF · IBM QRadar compatible</small></span><span class="adapter-state"><i></i> Ready</span></div>
+              <div class="adapter-row"><span class="format-logo syslog-logo">S</span><span class="adapter-name"><strong>Syslog</strong><small>RFC 3164 / 5424 style</small></span><span class="adapter-state"><i></i> Ready</span></div>
+              <div class="adapter-row"><span class="format-logo json-logo">{ }</span><span class="adapter-name"><strong>Structured JSON</strong><small>Nested fields · common aliases</small></span><span class="adapter-state"><i></i> Ready</span></div>
+              <div class="adapter-row"><span class="format-logo raw-logo">↳</span><span class="adapter-name"><strong>Raw fallback</strong><small>Unknown formats stay intact</small></span><span class="adapter-state"><i></i> Ready</span></div>
+            </div>
+            <div class="adapter-note"><span>ⓘ</span> New source parsers can be registered in <code>app.py</code>.</div>
+          </article>
+        </section>
+
+        <section class="panel events-panel" id="events">
+          <div class="events-heading"><div><div class="section-kicker"><span class="step-badge amber-step">03</span> OBSERVE</div><h2>Normalized event stream</h2><p>Inspect canonical fields and trace each event to its original payload.</p></div><div class="event-actions"><span class="stream-live"><i></i> LIVE STREAM</span><button id="refresh-button" class="refresh-button" type="button" title="Refresh events">↻</button></div></div>
+          <div class="table-toolbar"><label class="search-box"><span>⌕</span><input id="search-input" type="search" placeholder="Search events, IPs, devices…" autocomplete="off"></label><select id="status-filter" aria-label="Filter by normalization status"><option value="">All statuses</option><option value="normalized">Normalized</option><option value="partial">Partial</option><option value="unparsed">Unparsed</option></select><select id="format-filter" aria-label="Filter by source format"><option value="">All formats</option></select><span id="result-count" class="result-count">0 events</span></div>
+          <div class="table-wrap"><table><thead><tr><th>EVENT / TIME</th><th>SOURCE DEVICE</th><th>NETWORK FLOW</th><th>ACTION</th><th>STATUS</th><th></th></tr></thead><tbody id="events-body"><tr class="empty-row"><td colspan="6"><div class="empty-state"><span class="empty-icon">⌁</span><strong>No events yet</strong><span>Load the demo bundle above or paste logs to see normalized events here.</span></div></td></tr></tbody></table></div>
+          <div class="table-bottom"><span id="table-summary">Waiting for incoming events</span><button id="load-more" class="load-more" type="button" hidden>Load more <span>↓</span></button></div>
+        </section>
+
+        <section id="event-detail" class="detail-panel" hidden>
+          <div class="detail-heading"><div><div class="section-kicker">EVENT INSPECTOR</div><h2 id="detail-title">Event details</h2><div id="detail-subtitle" class="detail-subtitle"></div></div><button id="close-detail" class="close-button" type="button" aria-label="Close event details">×</button></div>
+          <div class="detail-meta" id="detail-meta"></div>
+          <div class="detail-tabs"><button class="detail-tab active" data-tab="normalized" type="button">Normalized event</button><button class="detail-tab" data-tab="raw" type="button">Original raw event</button><button id="download-raw" class="download-raw" type="button">Download raw ↗</button></div>
+          <pre id="detail-json" class="json-view"></pre>
+        </section>
+
+        <footer class="page-footer"><span>ULPF <b>·</b> Universal Log Pre-processing Framework</span><span>Prototype v0.1.0 <b>·</b> Processing locally</span></footer>
+      </div>
+    </main>
+  </div>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>

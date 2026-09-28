@@ -1,0 +1,12 @@
+services:
+  ulpf:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      ULPF_HOST: 0.0.0.0
+      ULPF_PORT: 8080
+      ULPF_DB_PATH: /app/data/ulpf.db
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
