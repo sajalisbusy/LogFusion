@@ -20,7 +20,7 @@ To create and pre-populate the local SQLite database without starting the web se
 python seed_demo.py
 ```
 
-The synthetic mixed-format input is in [samples/perimeter-demo.log](samples/perimeter-demo.log). Seeding skips records whose raw SHA-256 is already in the database. The `.gitignore` keeps the generated `data/ulpf.db` local; the sample log and seed script are shareable source artifacts.
+The synthetic mixed-format input is in [samples/perimeter-demo.log](samples/perimeter-demo.log). The repository includes the seeded SQLite demo database at `data/ulpf.db`; `python seed_demo.py` adds any missing demo events by raw SHA-256. The database contains demo data only. Do not commit databases containing real or sensitive events.
 
 ## Run in a container
 
